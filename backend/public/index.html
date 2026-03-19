@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фестиваль возможностей</title>
+    <link rel="stylesheet" href="/css/css.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+        <header>
+        <div class="header-container">
+            <div class="logo" onclick="navigateTo('home')">
+                <a href="#home">Фестиваль возможностей</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#competencies" onclick="navigateTo('competencies')">Компетенции</a></li>
+                    <li><a href="#participants" onclick="navigateTo('participants')">Участники</a></li>
+                    <li id="nav-register"><a href="#register" onclick="navigateTo('register')">Регистрация</a></li>
+                    <li id="nav-login"><a href="#login" onclick="navigateTo('login')">Вход</a></li>
+                    <li id="nav-cabinet" style="display: none;"><a href="#cabinet" onclick="navigateTo('cabinet')">Личный кабинет</a></li>
+                    <li id="nav-admin" style="display: none;"><a href="#admin" onclick="navigateTo('admin')">Админ панель</a></li>
+                    <li id="nav-logout" style="display: none;"><a href="#" onclick="handleLogout()">Выход</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- главная -->
+        <div id="home-page" class="page active">
+            <div class="slider" id="main-slider">
+                <div class="slider-container">
+                    <div class="slide" style="background-image: url('img/15.png')">
+                        <div class="slide-content">
+                            <h2>Фестиваль возможностей 2024</h2>
+                            <p>Открой новые горизонты вместе с нами</p>
+                        </div>
+                    </div>
+                    <div class="slide" style="background-image: url('img/16.png')">
+                        <div class="slide-content">
+                            <h2>Более 50 компетенций</h2>
+                            <p>Найди свое призвание</p>
+                        </div>
+                    </div>
+                    <div class="slide" style="background-image: url('img/17.png')">
+                        <div class="slide-content">
+                            <h2>1000+ участников</h2>
+                            <p>Стань частью большого сообщества</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
+                <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
+            </div>
+
+            <div class="countdown">
+                <h2>До начала фестиваля осталось:</h2>
+                <div class="countdown-timer" id="countdown">
+                    <div class="countdown-item">
+                        <span id="days">30</span>
+                        <span>дней</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="hours">12</span>
+                        <span>часов</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="minutes">45</span>
+                        <span>минут</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="seconds">30</span>
+                        <span>секунд</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin: 2rem 0;">Ключевые мероприятия</h2>
+            <div class="card-grid">
+                <div class="card" data-tooltip="Участвуй в мастер-классах от экспертов">
+                    <div class="card-image" style="background-image: url('img/18.png')"></div>
+                    <div class="card-content">
+                        <h3>Мастер-классы</h3>
+                        <p>15-20 июня</p>
+                        <p>Практические занятия от ведущих специалистов</p>
+                    </div>
+                </div>
+                <div class="card" data-tooltip="Презентуй свои проекты">
+                    <div class="card-image" style="background-image: url('img/19.png')"></div>
+                    <div class="card-content">
+                        <h3>Конкурс проектов</h3>
+                        <p>22 июня</p>
+                        <p>Защита инновационных разработок</p>
+                    </div>
+                </div>
+                <div class="card" data-tooltip="Встреча с профессионалами">
+                    <div class="card-image" style="background-image: url('img/20.png')"></div>
+                    <div class="card-content">
+                        <h3>Карьерный форум</h3>
+                        <p>25 июня</p>
+                        <p>Встречи с работодателями</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: var(--light); padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+                <h2 style="text-align: center; margin-bottom: 1rem;">Наши ценности</h2>
+                <div class="cen">
+                    <div style="text-align: center;">
+                        <h3 style="color: var(--primary);">🚀 Развитие</h3>
+                        <p>Постоянное совершенствование навыков</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <h3 style="color: var(--primary);">🤝 Сотрудничество</h3>
+                        <p>Обмен опытом и идеями</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <h3 style="color: var(--primary);">💡 Инновации</h3>
+                        <p>Внедрение новых технологий</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 2rem 0;">
+                <h2>Команда организаторов</h2>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin-top: 2rem;">
+                    <div style="text-align: center;">
+                        <img src="img/2.png" alt="Анна Иванова" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+                        <h3>Анна Иванова</h3>
+                        <p>Руководитель фестиваля</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <img src="img/10.png" alt="Петр Сидоров" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+                        <h3>Петр Сидоров</h3>
+                        <p>Программный директор</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- страница компетенций -->
+        <div id="competencies-page" class="page">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Компетенции фестиваля</h2>
+            <div id="competencies-list"></div>
+        </div>
+
+        <!-- страница участников -->
+        <div id="participants-page" class="page">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Участники фестиваля</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Поиск по имени:</label>
+                    <input type="text" id="search-name" placeholder="Введите имя..." onkeyup="filterParticipants()">
+                </div>
+                <div class="filter-group">
+                    <label>Компетенция:</label>
+                    <select id="filter-competency" onchange="filterParticipants()">
+                        <option value="">Все компетенции</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Категория:</label>
+                    <select id="filter-category" onchange="filterParticipants()">
+                        <option value="">Все категории</option>
+                        <option value="schoolboy">Школьник</option>
+                        <option value="student">Студент</option>
+                        <option value="specialist">Специалист</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Регион:</label>
+                    <select id="filter-region" onchange="filterParticipants()">
+                        <option value="">Все регионы</option>
+                    </select>
+                </div>
+            </div>
+            <div id="participants-grid" class="card-grid"></div>
+        </div>
+
+        <!-- страница регистрации -->
+        <div id="register-page" class="page">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Регистрация</h2>
+            <div class="form-container">
+                <form id="register-form" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Фамилия *</label>
+                        <input type="text" id="lastname" required data-tooltip="Введите вашу фамилию">
+                        <div class="error-message" id="lastname-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Имя *</label>
+                        <input type="text" id="firstname" required data-tooltip="Введите ваше имя">
+                        <div class="error-message" id="firstname-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Отчество</label>
+                        <input type="text" id="middlename">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" required data-tooltip="Введите действующий email">
+                        <div class="error-message" id="email-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль *</label>
+                        <input type="password" id="password" required minlength="8" data-tooltip="Минимум 8 символов">
+                        <div class="error-message" id="password-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Подтверждение пароля *</label>
+                        <input type="password" id="confirm-password" required>
+                        <div class="error-message" id="confirm-password-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Образование</label>
+                        <select id="education">
+                            <option value="secondary">Среднее</option>
+                            <option value="secondary_special">Среднее специальное</option>
+                            <option value="higher">Высшее</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Учебное заведение</label>
+                        <input type="text" id="institution">
+                    </div>
+                    <div class="form-group">
+                        <label>Регион</label>
+                        <select id="region" required>
+                            <option value="">Выберите регион</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Категория участника *</label>
+                        <select id="user-category" required>
+                            <option value="schoolboy">Школьник</option>
+                            <option value="student">Студент</option>
+                            <option value="specialist">Специалист</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Фото участника</label>
+                        <input type="file" id="photo" accept="image/*" data-tooltip="Загрузите ваше фото (макс 5MB)">
+                        <div class="error-message" id="photo-error"></div>
+                        <small style="color: #666; display: block; margin-top: 5px;">* Разрешены форматы: JPG, PNG, GIF. Максимальный размер: 5MB</small>
+                    </div>
+                    <button type="submit" class="btn">Зарегистрироваться</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- страница авторизации -->
+        <div id="login-page" class="page">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Вход в систему</h2>
+            <div class="form-container">
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="btn">Войти</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- личный кабинет -->
+        <div id="cabinet-page" class="page">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Личный кабинет</h2>
+            <div style="margin-bottom: 2rem;">
+                <h3>Поиск компетенций</h3>
+                <input type="text" id="competency-search" placeholder="Введите ключевые слова..." style="width: 100%; padding: 1rem;" onkeyup="searchCompetencies()">
+            </div>
+            <div id="competency-search-results" class="card-grid"></div>
+            <h3 style="margin: 2rem 0;">Подать заявку</h3>
+            <div class="form-container">
+                <form id="application-form" onsubmit="handleApplication(event)">
+                    <div class="form-group">
+                        <label>Выберите компетенцию</label>
+                        <select id="application-competency" required>
+                            <option value="">Выберите...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Краткое описание опыта</label>
+                        <textarea id="experience" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Отправить заявку</button>
+                </form>
+            </div>
+            <h3 style="margin: 2rem 0;">Мои заявки</h3>
+            <div class="admin-table">
+                <table style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Компетенция</th>
+                            <th>Дата подачи</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applications-list"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- админ панель -->
+        <div id="admin-page" class="page">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Панель администратора</h2>
+            <div style="margin-bottom: 2rem;">
+                <h3>Добавить новую компетенцию</h3>
+                <div class="form-container">
+                    <form id="competency-form" onsubmit="handleAddCompetency(event)">
+                        <div class="form-group">
+                            <label>Название компетенции *</label>
+                            <input type="text" id="competency-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Краткое описание *</label>
+                            <textarea id="competency-description" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Задание для скачивания</label>
+                            <input type="file" id="task-file" accept=".pdf,.doc,.docx">
+                        </div>
+                        <button type="submit" class="btn">Добавить компетенцию</button>
+                    </form>
+                </div>
+            </div>
+            <div>
+                <h3>Существующие компетенции</h3>
+                <div class="admin-table">
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Описание</th>
+                                <th>Задание</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="competencies-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>О фестивале</h4>
+                <a href="#home" onclick="navigateTo('home')">О нас</a>
+                <a href="#competencies" onclick="navigateTo('competencies')">Компетенции</a>
+                <a href="#participants" onclick="navigateTo('participants')">Участники</a>
+            </div>
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <p>📞 +7 (999) 123-45-67</p>
+                <p>✉️ info@festival.ru</p>
+                <div class="social-links">
+                    <a href="#" data-tooltip="Мы в VK">VK</a>
+                    <a href="#" data-tooltip="Мы в Telegram">TG</a>
+                    <a href="#" data-tooltip="Мы в YouTube">YT</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Обратная связь</h4>
+                <form onsubmit="handleFeedback(event)">
+                    <input type="email" placeholder="Ваш email" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem;">
+                    <textarea placeholder="Сообщение" rows="2" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem;"></textarea>
+                    <button type="submit" class="btn btn-secondary" style="padding: 0.5rem;">Отправить</button>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2026 Фестиваль возможностей. Все права защищены.
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+</html> 
+
+
