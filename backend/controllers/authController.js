@@ -2,6 +2,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const db = require('../config/database');
 // ГЕНЕРАЦИЯ JWT ТОКЕНА
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -55,19 +56,40 @@ const register = async (req, res) => {
 // авторизация
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Введите email и пароль' });
+        const { login, password } = req.body; 
+        // проверяем, что поля не пустые
+        if (!login || !password) {
+            return res.status(400).json({ 
+                message: 'Введите логин и пароль' 
+            });
         }
-        const user = await User.findByEmail(email);
+        let user;
+        
+        if (login.toLowerCase() === 'admin') {
+            const [rows] = await db.execute(
+                'SELECT * FROM users WHERE role = "admin" LIMIT 1'
+            );
+            user = rows[0];
+        } else {
+            user = await User.findByEmail(login);
+        }
+        // пользователь не найден
         if (!user) {
-            return res.status(401).json({ message: 'Неверный email или пароль' });
+            return res.status(401).json({ 
+                message: 'Неверный логин или пароль' 
+            });
         }
+        // сравниваем введенный пароль с хешем из базы
         const isPasswordValid = await bcrypt.compare(password, user.password);
+
         if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Неверный email или пароль' });
+            return res.status(401).json({ 
+                message: 'Неверный логин или пароль' 
+            });
         }
+        // JWT токен
         const token = generateToken(user.id);
+        // отправляем успешный ответ
         res.json({
             message: 'Вход выполнен успешно',
             token,
@@ -76,12 +98,16 @@ const login = async (req, res) => {
                 email: user.email,
                 firstname: user.firstname,
                 lastname: user.lastname,
-                role: user.role
+                role: user.role,
+                photo: user.photo
             }
         });
+
     } catch (error) {
         console.error('Ошибка входа:', error);
-        res.status(500).json({ message: 'Ошибка сервера' });
+        res.status(500).json({ 
+            message: 'Ошибка сервера при входе' 
+        });
     }
 };
 module.exports = { register, login };

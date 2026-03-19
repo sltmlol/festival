@@ -1,20 +1,17 @@
-// Конфигурация API
+// конфигурация API
 const API_URL = '/api';
 let currentUser = null;
 let slideIndex = 0;
 
-// ==============================================
-// Вспомогательные функции
-// ==============================================
+
+// функции при ошибках
 function showError(elementId, message) {
     const element = document.getElementById(elementId);
     if (element) element.innerText = message;
 }
-
 function clearErrors() {
     document.querySelectorAll('.error-message').forEach(el => el.innerText = '');
 }
-
 function showMessage(message, isSuccess = true) {
     alert(message);
 }
@@ -46,15 +43,12 @@ function updateNavigation() {
     }
 }
 
-// ==============================================
-// Навигация
-// ==============================================
+// навигация
 function navigateTo(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(page + '-page').classList.add('active');
     window.location.hash = page;
 
-    // Загрузка данных для соответствующих страниц
     switch(page) {
         case 'competencies':
             loadCompetencies();
@@ -75,22 +69,18 @@ function navigateTo(page) {
     }
 }
 
-// ==============================================
-// Регионы
-// ==============================================
+// регионы
 async function loadRegions() {
     try {
         const response = await fetch(`${API_URL}/regions`);
         const regions = await response.json();
-        
-        // Для формы регистрации
+        // для формы регистрации
         const select = document.getElementById('region');
         if (select) {
             select.innerHTML = '<option value="">Выберите регион</option>' +
                 regions.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
-        }
-        
-        // Для фильтра участников
+        }      
+        // для фильтра участников
         const filterRegion = document.getElementById('filter-region');
         if (filterRegion) {
             filterRegion.innerHTML = '<option value="">Все регионы</option>' +
@@ -167,7 +157,6 @@ async function loadFilters() {
 
 async function filterParticipants() {
     const params = new URLSearchParams();
-    
     const name = document.getElementById('search-name')?.value;
     const competency = document.getElementById('filter-competency')?.value;
     const category = document.getElementById('filter-category')?.value;
@@ -217,38 +206,29 @@ function getCategoryName(category) {
     return categories[category] || category;
 }
 
-// ==============================================
-// Регистрация с фото
-// ==============================================
+// регистрация 
 async function handleRegister(event) {
     event.preventDefault();
     clearErrors();
-
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
     let isValid = true;
-
-    // Валидация пароля
+    // валидация пароля
     if (password.length < 8) {
         showError('password-error', 'Пароль должен содержать минимум 8 символов');
         isValid = false;
     }
-
     if (password !== confirmPassword) {
         showError('confirm-password-error', 'Пароли не совпадают');
         isValid = false;
     }
-
-    // Проверка фото
     const photoFile = document.getElementById('photo').files[0];
     if (photoFile) {
-        // Проверка размера (макс 5MB)
+        // проверка размера (макс 5MB)
         if (photoFile.size > 5 * 1024 * 1024) {
             showError('photo-error', 'Фото не должно превышать 5MB');
             isValid = false;
         }
-        
-        // Проверка типа
         if (!photoFile.type.startsWith('image/')) {
             showError('photo-error', 'Можно загружать только изображения');
             isValid = false;
@@ -257,7 +237,7 @@ async function handleRegister(event) {
 
     if (!isValid) return;
 
-    // Создаем FormData для отправки файла
+    // FormData для отправки файла
     const formData = new FormData();
     formData.append('lastname', document.getElementById('lastname').value);
     formData.append('firstname', document.getElementById('firstname').value);
@@ -268,14 +248,11 @@ async function handleRegister(event) {
     formData.append('institution', document.getElementById('institution').value || '');
     formData.append('region_id', document.getElementById('region').value || '');
     formData.append('category', document.getElementById('user-category').value);
-    
-    // Добавляем фото, если выбрано
     if (photoFile) {
         formData.append('photo', photoFile);
     }
-
     try {
-        // Показываем индикатор загрузки
+        // индикатор загрузки
         const submitBtn = event.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Регистрация...';
@@ -283,18 +260,14 @@ async function handleRegister(event) {
 
         const response = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
-            body: formData  // Без headers! FormData сама ставит правильный Content-Type
+            body: formData  
         });
-
         const data = await response.json();
-
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
-
         if (!response.ok) {
             throw new Error(data.message || 'Ошибка регистрации');
         }
-
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         currentUser = data.user;
@@ -304,7 +277,6 @@ async function handleRegister(event) {
     } catch (error) {
         console.error('Ошибка регистрации:', error);
         showMessage(error.message, false);
-        
         const submitBtn = event.target.querySelector('button[type="submit"]');
         if (submitBtn) {
             submitBtn.textContent = 'Зарегистрироваться';
@@ -312,7 +284,7 @@ async function handleRegister(event) {
         }
     }
 }
-// Превью фото перед загрузкой
+// превью фото перед загрузкой
 document.addEventListener('DOMContentLoaded', function() {
     const photoInput = document.getElementById('photo');
     if (photoInput) {
@@ -320,7 +292,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const file = e.target.files[0];
             const preview = document.getElementById('photo-preview');
             const previewImg = preview ? preview.querySelector('img') : null;
-            
             if (file && preview && previewImg) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -334,28 +305,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-// ==============================================
-// Вход
-// ==============================================
+
+// вход
 async function handleLogin(event) {
     event.preventDefault();
-
-    const email = document.getElementById('login-email').value;
+    const login = document.getElementById('login-username').value;  
     const password = document.getElementById('login-password').value;
-
     try {
         const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ login, password })  
         });
-
         const data = await response.json();
 
         if (!response.ok) {
             throw new Error(data.message || 'Ошибка входа');
         }
-
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         currentUser = data.user;
@@ -369,13 +335,12 @@ async function handleLogin(event) {
         
         showMessage('Вход выполнен успешно!');
     } catch (error) {
+        console.error('Ошибка входа:', error);
         showMessage(error.message, false);
     }
 }
 
-// ==============================================
-// Выход
-// ==============================================
+// выход
 function handleLogout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -385,9 +350,7 @@ function handleLogout() {
     showMessage('Вы вышли из системы');
 }
 
-// ==============================================
-// Личный кабинет
-// ==============================================
+// личный кабинет
 async function loadCabinet() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -400,6 +363,7 @@ async function loadCabinet() {
         loadMyApplications()
     ]);
 }
+
 
 async function loadCompetenciesForSelect() {
     try {
@@ -563,9 +527,7 @@ async function cancelApplication(id) {
     }
 }
 
-// ==============================================
-// Админ панель
-// ==============================================
+// админка
 async function loadAdminPanel() {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -669,9 +631,7 @@ async function deleteCompetency(id) {
     }
 }
 
-// ==============================================
-// Слайдер
-// ==============================================
+// слайдер
 function changeSlide(direction) {
     const slides = document.querySelectorAll('.slide');
     if (slides.length === 0) return;
@@ -680,9 +640,7 @@ function changeSlide(direction) {
     document.querySelector('.slider-container').style.transform = `translateX(-${slideIndex * 100}%)`;
 }
 
-// ==============================================
-// Обратный отсчет
-// ==============================================
+// счетчик
 function updateCountdown() {
     const eventDate = new Date('2026-06-15').getTime();
     const now = new Date().getTime();
@@ -692,32 +650,25 @@ function updateCountdown() {
         document.getElementById('countdown').innerHTML = '<h3>Фестиваль начался!</h3>';
         return;
     }
-
     document.getElementById('days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
     document.getElementById('hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     document.getElementById('minutes').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     document.getElementById('seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000);
 }
 
-// ==============================================
-// Обратная связь
-// ==============================================
+// обратная связь
 function handleFeedback(event) {
     event.preventDefault();
     showMessage('Сообщение отправлено! (Демо-режим)');
 }
 
-// ==============================================
-// Инициализация
-// ==============================================
+// инициализация
 window.onload = function() {
     updateNavigation();
     updateCountdown();
     setInterval(updateCountdown, 1000);
-
     const hash = window.location.hash.slice(1) || 'home';
     navigateTo(hash);
-    
-    // Автоматическая прокрутка слайдера каждые 5 секунд
+    // автоматическая прокрутка слайдера каждые 5 секунд
     setInterval(() => changeSlide(1), 5000);
 }; 
